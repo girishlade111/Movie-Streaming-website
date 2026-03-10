@@ -4,3 +4,5 @@ export { default as MovieDetail } from './MovieDetail';
 export { default as LoginPage } from './LoginPage';
 export { default as RegisterPage } from './RegisterPage';
 export { default as SearchPage } from './SearchPage';
+export { default as BrowsePage } from './BrowsePage';
+export { default as MyListPage } from './MyListPage';

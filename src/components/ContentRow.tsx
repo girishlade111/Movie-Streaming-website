@@ -1,19 +1,22 @@
 import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface Movie {
   _id: string;
   title: string;
   videoUrl: string;
   thumbnail?: string;
+  backdrop?: string;
 }
 
 interface ContentRowProps {
   title: string;
   movies: Movie[];
   variant?: 'poster' | 'landscape';
+  showProgress?: boolean;
 }
 
-export default function ContentRow({ title, movies, variant = 'poster' }: ContentRowProps) {
+export default function ContentRow({ title, movies, variant = 'poster', showProgress = false }: ContentRowProps) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
@@ -58,29 +61,38 @@ export default function ContentRow({ title, movies, variant = 'poster' }: Conten
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {movies.map((movie) => (
-            <div
+            <Link
               key={movie._id}
+              to={`/watch/${movie._id}`}
               className={`flex-shrink-0 ${
                 variant === 'poster' ? 'w-40 md:w-48' : 'w-64 md:w-80'
               }`}
             >
-              <div className="relative aspect-poster rounded-lg overflow-hidden bg-dark-800 group/card cursor-pointer transition-transform duration-300 hover:scale-105">
+              <div className="relative aspect-poster rounded-lg overflow-hidden bg-neutral-800 group/card cursor-pointer transition-transform duration-300 hover:scale-105">
                 <img
-                  src={movie.thumbnail || movie.videoUrl}
+                  src={movie.thumbnail || movie.backdrop || movie.videoUrl}
                   alt={movie.title}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300" />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
                   <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
-                    <svg className="w-6 h-6 text-dark-900 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-neutral-900 ml-1" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
                 </div>
+                {showProgress && (
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-neutral-700">
+                    <div 
+                      className="h-full bg-red-600" 
+                      style={{ width: `${Math.random() * 80 + 20}%` }}
+                    />
+                  </div>
+                )}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

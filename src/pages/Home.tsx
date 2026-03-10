@@ -1,137 +1,19 @@
-import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { HeroBanner, ContentRow } from '../components';
-import { useMovieStore } from '../store';
-import type { Movie } from '../types';
-
-// Mock data for demonstration
-const mockMovies: Movie[] = [
-  {
-    _id: '1',
-    title: 'Interstellar',
-    description: 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.',
-    releaseYear: 2014,
-    duration: 169,
-    rating: 8.6,
-    genre: ['Adventure', 'Drama', 'Sci-Fi'],
-    cast: ['Matthew McConaughey', 'Anne Hathaway', 'Jessica Chastain'],
-    director: 'Christopher Nolan',
-    thumbnail: 'https://image.tmdb.org/t/p/w500/gEU2QniL6E8AHt40H07A5KWYJL.jpg',
-    backdrop: 'https://image.tmdb.org/t/p/original/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg',
-    videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    quality: '4K',
-    isTrending: true,
-    isNewRelease: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    _id: '2',
-    title: 'The Dark Knight',
-    description: 'When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests.',
-    releaseYear: 2008,
-    duration: 152,
-    rating: 9.0,
-    genre: ['Action', 'Crime', 'Drama'],
-    cast: ['Christian Bale', 'Heath Ledger', 'Aaron Eckhart'],
-    director: 'Christopher Nolan',
-    thumbnail: 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
-    backdrop: 'https://image.tmdb.org/t/p/original/hkBaDkMWbLaf8wYlsXQzEhRnJWE.jpg',
-    videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    quality: '4K',
-    isTrending: true,
-    isNewRelease: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    _id: '3',
-    title: 'Inception',
-    description: 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea.',
-    releaseYear: 2010,
-    duration: 148,
-    rating: 8.8,
-    genre: ['Action', 'Adventure', 'Sci-Fi'],
-    cast: ['Leonardo DiCaprio', 'Joseph Gordon-Levitt', 'Ellen Page'],
-    director: 'Christopher Nolan',
-    thumbnail: 'https://image.tmdb.org/t/p/w500/9gk7admal4ZLcnwnCSmYd2t8bU.jpg',
-    backdrop: 'https://image.tmdb.org/t/p/original/s3TBrRGB1jav7y4argnzPkNPZKs.jpg',
-    videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    quality: '4K',
-    isTrending: true,
-    isNewRelease: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    _id: '4',
-    title: 'The Matrix',
-    description: 'A computer hacker learns about the true nature of reality and his role in the war against its controllers.',
-    releaseYear: 1999,
-    duration: 136,
-    rating: 8.7,
-    genre: ['Action', 'Sci-Fi'],
-    cast: ['Keanu Reeves', 'Laurence Fishburne', 'Carrie-Anne Moss'],
-    director: 'Lana Wachowski',
-    thumbnail: 'https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9Gkd9EpXUkU4.jpg',
-    backdrop: 'https://image.tmdb.org/t/p/original/fNG7i7RqMErkcqhohV2a6cV1Ehy.jpg',
-    videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    quality: 'FHD',
-    isTrending: false,
-    isNewRelease: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    _id: '5',
-    title: 'Avengers: Endgame',
-    description: 'After the devastating events of Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more.',
-    releaseYear: 2019,
-    duration: 181,
-    rating: 8.4,
-    genre: ['Action', 'Adventure', 'Drama'],
-    cast: ['Robert Downey Jr.', 'Chris Evans', 'Scarlett Johansson'],
-    director: 'Anthony Russo',
-    thumbnail: 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg',
-    backdrop: 'https://image.tmdb.org/t/p/original/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg',
-    videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    quality: '4K',
-    isTrending: true,
-    isNewRelease: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    _id: '6',
-    title: 'Pulp Fiction',
-    description: 'The lives of two mob hitmen, a boxer, a gangster and his wife intertwine in four tales of violence and redemption.',
-    releaseYear: 1994,
-    duration: 154,
-    rating: 8.9,
-    genre: ['Crime', 'Drama'],
-    cast: ['John Travolta', 'Uma Thurman', 'Samuel L. Jackson'],
-    director: 'Quentin Tarantino',
-    thumbnail: 'https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg',
-    backdrop: 'https://image.tmdb.org/t/p/original/suaEOtk1N1sgg2MTM7oZd2cfVp3.jpg',
-    videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    quality: 'FHD',
-    isTrending: false,
-    isNewRelease: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
+import { useAppStore } from '../store';
+import { movies, tvShows, categories } from '../constants/mockData';
 
 export default function Home() {
-  const { setMovies, setTrendingMovies, setNewReleases, movies, trendingMovies } = useMovieStore();
+  const { getContinueWatchingItems } = useAppStore();
 
-  useEffect(() => {
-    // In a real app, fetch from API
-    setMovies(mockMovies);
-    setTrendingMovies(mockMovies.filter(m => m.isTrending));
-    setNewReleases(mockMovies.filter(m => m.isNewRelease));
-  }, [setMovies, setTrendingMovies, setNewReleases]);
-
+  const allContent = [...movies, ...tvShows];
   const featuredMovie = movies[0];
+  const trendingContent = allContent.filter(m => m.isTrending);
+  const newReleases = allContent.filter(m => m.isNewRelease);
+  const topRated = [...allContent].sort((a, b) => b.rating - a.rating).slice(0, 6);
+  const actionMovies = allContent.filter(m => m.genre.includes('Action'));
+  const sciFiContent = allContent.filter(m => m.genre.includes('Sci-Fi'));
+  const continueWatchingItems = getContinueWatchingItems();
 
   return (
     <div className="min-h-screen">
@@ -139,12 +21,98 @@ export default function Home() {
       {featuredMovie && <HeroBanner movie={featuredMovie} />}
 
       {/* Content Sections */}
-      <div className="space-y-8 -mt-32 relative z-10">
-        <ContentRow title="Trending Now" movies={trendingMovies} />
-        <ContentRow title="New Releases" movies={mockMovies.filter(m => m.isNewRelease)} />
-        <ContentRow title="Action Movies" movies={mockMovies.filter(m => m.genre.includes('Action'))} />
-        <ContentRow title="Sci-Fi Adventures" movies={mockMovies.filter(m => m.genre.includes('Sci-Fi'))} />
-        <ContentRow title="Continue Watching" movies={mockMovies.slice(2, 5)} variant="landscape" />
+      <div className="space-y-8 -mt-32 relative z-10 pb-8">
+        {/* Continue Watching */}
+        {continueWatchingItems.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between px-4 mb-4">
+              <h2 className="text-xl md:text-2xl font-bold">Continue Watching</h2>
+              <Link to="/my-list" className="text-sm text-gray-400 hover:text-white transition-colors">
+                View All
+              </Link>
+            </div>
+            <ContentRow 
+              title="" 
+              movies={continueWatchingItems.map(item => ({
+                _id: item._id,
+                title: item.title,
+                thumbnail: item.thumbnail,
+                backdrop: item.backdrop,
+                videoUrl: item.videoUrl,
+              }))} 
+              variant="landscape"
+              showProgress
+            />
+          </section>
+        )}
+
+        <ContentRow title="Trending Now" movies={trendingContent} />
+        <ContentRow title="New Releases" movies={newReleases} />
+        <ContentRow title="Top Rated" movies={topRated} />
+        <ContentRow title="Action & Adventure" movies={actionMovies} />
+        <ContentRow title="Sci-Fi & Fantasy" movies={sciFiContent} />
+
+        {/* Categories Section */}
+        <section className="px-4 py-8">
+          <h2 className="text-xl md:text-2xl font-bold mb-6">Browse Categories</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {categories.slice(0, 5).map((category) => (
+              <Link
+                key={category.id}
+                to={`/browse/${category.id}`}
+                className="relative h-32 rounded-lg overflow-hidden group card-hover"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-red-600/90 to-neutral-900 flex items-center justify-center">
+                  <span className="text-lg font-semibold">{category.name}</span>
+                </div>
+                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors" />
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* TV Shows Section */}
+        <section className="px-4 py-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl md:text-2xl font-bold">Popular TV Shows</h2>
+            <Link to="/browse/tv-shows" className="text-sm text-gray-400 hover:text-white transition-colors">
+              View All
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {tvShows.slice(0, 5).map((show) => (
+              <Link
+                key={show._id}
+                to={`/show/${show._id}`}
+                className="group relative block rounded-lg overflow-hidden bg-neutral-800 transition-all duration-300 hover:scale-105 hover:z-10"
+              >
+                <div className="relative aspect-poster overflow-hidden">
+                  <img
+                    src={show.thumbnail}
+                    alt={show.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-2 right-2 px-2 py-1 bg-neutral-950/80 backdrop-blur-sm rounded text-xs font-semibold">
+                    {show.seasons.length} Season{show.seasons.length !== 1 ? 's' : ''}
+                  </div>
+                  <div className="absolute top-2 left-2 px-2 py-1 bg-red-600/90 backdrop-blur-sm rounded text-xs font-semibold flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    {show.rating.toFixed(1)}
+                  </div>
+                </div>
+                <div className="p-3">
+                  <h3 className="font-semibold truncate group-hover:text-red-500 transition-colors">
+                    {show.title}
+                  </h3>
+                  <p className="text-xs text-gray-400 mt-1">{show.releaseYear}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

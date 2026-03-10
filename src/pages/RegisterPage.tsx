@@ -33,7 +33,7 @@ export default function RegisterPage() {
     }
 
     try {
-      await register(formData.email, formData.password, formData.username);
+      await register();
       navigate('/');
     } catch (err) {
       setError('Registration failed. Please try again.');

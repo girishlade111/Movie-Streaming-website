@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import type { Movie } from '../types';
 import { useAuthStore } from '../store';
 
 export default function MovieDetail() {
@@ -10,7 +9,7 @@ export default function MovieDetail() {
   const [isInWatchlist, setIsInWatchlist] = useState(false);
 
   // Mock movie data - In real app, fetch from API by id
-  const movie: Movie = {
+  const movie = {
     _id: id || '1',
     title: 'Interstellar',
     description: 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival. Earth\'s future has been riddled by disasters, famines, and droughts. There is only one way to ensure mankind\'s survival: Interstellar travel. A newly discovered wormhole in the far reaches of our solar system allows a team of astronauts to go where no man has gone before.',
