@@ -1,54 +1,61 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MovieCard } from '../components';
 import { movies, tvShows, categories, genres } from '../constants/mockData';
+import MovieCard from '../components/MovieCard';
 
 export default function BrowsePage() {
   const { category } = useParams<{ category?: string }>();
-  const [selectedGenre, setSelectedGenre] = useState<string>('all');
-  const [contentType, setContentType] = useState<'all' | 'movie' | 'show'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'movies' | 'tv'>('all');
 
-  // Filter content based on category and filters
-  const getAllContent = () => {
-    let content = [...movies, ...tvShows.map(show => ({ ...show, type: 'show' as const }))];
-    
-    // Filter by category
-    if (category) {
-      const categoryConfig = categories.find(c => c.id === category);
-      
-      if (categoryConfig?.type === 'genre') {
-        const genreName = categoryConfig.name;
-        content = content.filter(item => 
-          item.genre.some(g => g.toLowerCase() === genreName.toLowerCase())
-        );
-      } else if (category === 'trending') {
-        content = content.filter(item => item.isTrending);
-      } else if (category === 'new-releases') {
-        content = content.filter(item => item.isNewRelease);
-      } else if (category === 'top-rated') {
-        content = content.sort((a, b) => b.rating - a.rating);
-      }
+  const allContent = [
+    ...movies.map(m => ({ ...m, contentType: 'movie' as const })),
+    ...tvShows.map(s => ({ ...s, contentType: 'tv' as const })),
+  ];
+
+  // Filter by category
+  const getCategoryContent = (categoryId: string) => {
+    if (categoryId === 'trending') {
+      return allContent.filter(c => c.isTrending);
     }
-    
-    // Filter by content type
-    if (contentType === 'movie') {
-      content = content.filter(item => !('seasons' in item));
-    } else if (contentType === 'show') {
-      content = content.filter(item => 'seasons' in item);
+    if (categoryId === 'new-releases') {
+      return allContent.filter(c => c.isNewRelease);
     }
-    
-    // Filter by genre
-    if (selectedGenre !== 'all') {
-      content = content.filter(item => 
-        item.genre.some(g => g.toLowerCase() === selectedGenre.toLowerCase())
+    if (categoryId === 'top-rated') {
+      return [...allContent].sort((a, b) => b.rating - a.rating);
+    }
+    // Genre-based
+    const categoryConfig = categories.find(c => c.id === categoryId);
+    if (categoryConfig) {
+      return allContent.filter(c =>
+        c.genre.some(g => g.toLowerCase() === categoryConfig.name.toLowerCase())
       );
     }
-    
+    return allContent;
+  };
+
+  // Filter by active tab
+  const filterByType = (content: typeof allContent) => {
+    if (activeTab === 'movies') {
+      return content.filter(c => c.contentType === 'movie');
+    }
+    if (activeTab === 'tv') {
+      return content.filter(c => c.contentType === 'tv');
+    }
     return content;
   };
 
-  const filteredContent = getAllContent();
+  const categoryContent = category ? getCategoryContent(category) : allContent;
+  const filteredContent = filterByType(categoryContent);
   const categoryName = category ? categories.find(c => c.id === category)?.name || category : 'All Content';
+
+  // Collections
+  const collections = {
+    awardWinners: allContent.filter(c => c.rating >= 8.5),
+    trending: allContent.filter(c => c.isTrending),
+    newReleases: allContent.filter(c => c.isNewRelease),
+    classics: allContent.filter(c => c.releaseYear < 2000),
+    fourK: allContent.filter(c => c.quality === '4K'),
+  };
 
   return (
     <div className="min-h-screen bg-neutral-950 pt-24 pb-12">
@@ -61,112 +68,198 @@ export default function BrowsePage() {
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap gap-4 mb-8">
-          {/* Content Type Filter */}
-          <div className="flex bg-neutral-800 rounded-lg p-1">
-            <button
-              onClick={() => setContentType('all')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                contentType === 'all' ? 'bg-red-600 text-white' : 'text-gray-300 hover:text-white'
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setContentType('movie')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                contentType === 'movie' ? 'bg-red-600 text-white' : 'text-gray-300 hover:text-white'
-              }`}
-            >
-              Movies
-            </button>
-            <button
-              onClick={() => setContentType('show')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                contentType === 'show' ? 'bg-red-600 text-white' : 'text-gray-300 hover:text-white'
-              }`}
-            >
-              TV Shows
-            </button>
-          </div>
-
-          {/* Genre Filter */}
-          <select
-            value={selectedGenre}
-            onChange={(e) => setSelectedGenre(e.target.value)}
-            className="px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm text-white focus:outline-none focus:border-red-500"
+        {/* Tabs */}
+        <div className="flex items-center gap-4 mb-8 border-b border-neutral-800">
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`pb-3 px-4 font-medium transition-colors relative ${
+              activeTab === 'all' ? 'text-white' : 'text-gray-400 hover:text-white'
+            }`}
           >
-            <option value="all">All Genres</option>
-            {genres.map((genre) => (
-              <option key={genre._id} value={genre.name}>
-                {genre.name}
-              </option>
-            ))}
-          </select>
+            All
+            {activeTab === 'all' && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 rounded-full" />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('movies')}
+            className={`pb-3 px-4 font-medium transition-colors relative ${
+              activeTab === 'movies' ? 'text-white' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            Movies
+            {activeTab === 'movies' && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 rounded-full" />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('tv')}
+            className={`pb-3 px-4 font-medium transition-colors relative ${
+              activeTab === 'tv' ? 'text-white' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            TV Shows
+            {activeTab === 'tv' && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 rounded-full" />
+            )}
+          </button>
         </div>
 
-        {/* Categories Quick Links */}
-        {!category && (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Browse by Category</h2>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  to={`/browse/${cat.id}`}
-                  className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-full text-sm text-gray-300 hover:text-white transition-colors border border-neutral-700"
-                >
-                  {cat.name}
+        {/* Collections Section */}
+        {!category && activeTab === 'all' && (
+          <>
+            {/* Award Winners */}
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">🏆 Award Winners</h2>
+                <Link to="/browse/award-winners" className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1 group">
+                  View All
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
-              ))}
-            </div>
-          </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {collections.awardWinners.slice(0, 5).map((item) => (
+                  <MovieCard key={item._id} movie={item} variant="poster" />
+                ))}
+              </div>
+            </section>
+
+            {/* Trending This Week */}
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">🔥 Trending This Week</h2>
+                <Link to="/browse/trending" className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1 group">
+                  View All
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {collections.trending.slice(0, 5).map((item, index) => (
+                  <MovieCard key={item._id} movie={item} variant="poster" showRank={index + 1} />
+                ))}
+              </div>
+            </section>
+
+            {/* New Releases */}
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">🆕 New Releases</h2>
+                <Link to="/browse/new-releases" className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1 group">
+                  View All
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {collections.newReleases.slice(0, 5).map((item) => (
+                  <MovieCard key={item._id} movie={item} variant="poster" isNew />
+                ))}
+              </div>
+            </section>
+
+            {/* 4K Ultra HD */}
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">📀 4K Ultra HD</h2>
+                <Link to="/browse/4k" className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1 group">
+                  View All
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {collections.fourK.slice(0, 5).map((item) => (
+                  <MovieCard key={item._id} movie={item} variant="poster" />
+                ))}
+              </div>
+            </section>
+
+            {/* Classic Movies */}
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">🎬 Classic Movies</h2>
+                <Link to="/browse/classics" className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1 group">
+                  View All
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {collections.classics.slice(0, 5).map((item) => (
+                  <MovieCard key={item._id} movie={item} variant="poster" />
+                ))}
+              </div>
+            </section>
+          </>
         )}
 
-        {/* Content Grid */}
-        {filteredContent.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {filteredContent.map((item) => (
-              <MovieCard
-                key={item._id}
-                movie={{
-                  _id: item._id,
-                  title: item.title,
-                  description: item.description,
-                  releaseYear: item.releaseYear,
-                  duration: 'duration' in item ? item.duration : 0,
-                  rating: item.rating,
-                  genre: item.genre,
-                  cast: item.cast,
-                  director: 'director' in item ? item.director : 'creator' in item ? item.creator : '',
-                  thumbnail: item.thumbnail,
-                  backdrop: item.backdrop,
-                  videoUrl: item.videoUrl,
-                  quality: item.quality,
-                  maturityRating: item.maturityRating,
-                  language: item.language,
-                  subtitles: item.subtitles,
-                  createdAt: item.createdAt,
-                  updatedAt: item.updatedAt,
-                }}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <svg
-              className="w-20 h-20 mx-auto text-gray-600 mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-            </svg>
-            <h2 className="text-xl font-semibold mb-2">No content found</h2>
-            <p className="text-gray-400">Try adjusting your filters</p>
-          </div>
+        {/* Genre Browse Grid */}
+        {!category && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-6">Browse by Genre</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {genres.map((genre) => {
+                const genreContent = allContent.filter(c =>
+                  c.genre.some(g => g.toLowerCase() === genre.name.toLowerCase())
+                );
+                return (
+                  <Link
+                    key={genre._id}
+                    to={`/browse/${genre.slug}`}
+                    className="relative h-40 rounded-lg overflow-hidden group card-hover"
+                  >
+                    <img
+                      src={genreContent[0]?.backdrop || allContent[0]?.backdrop}
+                      alt={genre.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <h3 className="text-lg font-bold">{genre.name}</h3>
+                      <p className="text-xs text-gray-400">{genreContent.length} titles</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
         )}
+
+        {/* Category Content */}
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold">
+              {category ? `${categoryName} Content` : 'All Content'}
+            </h2>
+          </div>
+          {filteredContent.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              {filteredContent.map((item) => (
+                <MovieCard
+                  key={item._id}
+                  movie={item}
+                  variant="poster"
+                  isNew={item.isNewRelease}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <svg className="w-20 h-20 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+              </svg>
+              <h3 className="text-xl font-semibold mb-2">No content available</h3>
+              <p className="text-gray-400">Check back later for new additions</p>
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );
