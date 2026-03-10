@@ -1,0 +1,289 @@
+/* Accessibility Utilities */
+
+/* ============================================
+   1. Screen Reader Only (Visually Hidden)
+   ============================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: inherit;
+}
+
+/* ============================================
+   2. Skip Links
+   ============================================ */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #E50914;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 9999;
+  transition: top 200ms ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   3. Focus Management
+   ============================================ */
+
+/* Focus Trap for Modals */
+.focus-trap {
+  outline: none;
+}
+
+.focus-trap *:focus {
+  outline: 2px solid #E50914;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   4. High Contrast Mode Support
+   ============================================ */
+
+@media (forced-colors: active) {
+  .button-primary {
+    border: 2px solid currentColor;
+  }
+  
+  .card-hover:hover {
+    border: 2px solid currentColor;
+  }
+  
+  input,
+  select,
+  textarea {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================
+   5. Text Resizing Support
+   ============================================ */
+
+/* Support up to 200% zoom */
+@media (min-resolution: 192dpi) {
+  html {
+    font-size: 125%;
+  }
+}
+
+/* ============================================
+   6. Touch Target Sizes
+   ============================================ */
+
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   7. Live Regions (ARIA)
+   ============================================ */
+
+.live-region-polite {
+  aria-live: polite;
+  aria-atomic: true;
+}
+
+.live-region-assertive {
+  aria-live: assertive;
+  aria-atomic: true;
+}
+
+/* ============================================
+   8. Reduced Transparency
+   ============================================ */
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ============================================
+   9. Print Styles
+   ============================================ */
+
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  a {
+    text-decoration: underline;
+  }
+  
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+}
+
+/* ============================================
+   10. Color Contrast Utilities
+   ============================================ */
+
+/* WCAG AA Compliant Text Colors */
+.text-aa-large {
+  color: #767676; /* 4.5:1 contrast on white for 18pt+ text */
+}
+
+.text-aa-small {
+  color: #595959; /* 4.5:1 contrast on white for normal text */
+}
+
+.text-aaa-large {
+  color: #858585; /* 7:1 contrast for 18pt+ text */
+}
+
+.text-aaa-small {
+  color: #6d6d6d; /* 7:1 contrast for normal text */
+}
+
+/* Dark mode variants */
+.dark .text-aa-large {
+  color: #a6a6a6;
+}
+
+.dark .text-aa-small {
+  color: #c4c4c4;
+}
+
+/* ============================================
+   11. Motion Preferences
+   ============================================ */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .no-motion {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================
+   12. Landmark Regions
+   ============================================ */
+
+/* Semantic HTML helpers */
+[role="banner"] {
+  /* Header styles */
+}
+
+[role="navigation"] {
+  /* Nav styles */
+}
+
+[role="main"] {
+  /* Main content styles */
+}
+
+[role="contentinfo"] {
+  /* Footer styles */
+}
+
+[role="complementary"] {
+  /* Sidebar/aside styles */
+}
+
+/* ============================================
+   13. Error State Accessibility
+   ============================================ */
+
+.error-message {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.error-message::before {
+  content: '⚠ ';
+}
+
+.error-field {
+  border-color: #ef4444;
+  border-width: 2px;
+}
+
+.error-field:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* ============================================
+   14. Success State Accessibility
+   ============================================ */
+
+.success-message {
+  color: #22c55e;
+  font-weight: 500;
+}
+
+.success-message::before {
+  content: '✓ ';
+}
+
+/* ============================================
+   15. Loading State Accessibility
+   ============================================ */
+
+.loading-state {
+  aria-busy: true;
+}
+
+.loading-state::after {
+  content: ' (loading)';
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

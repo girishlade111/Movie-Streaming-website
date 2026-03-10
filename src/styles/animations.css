@@ -1,0 +1,607 @@
+/* Animation System - Premium UI Polish */
+
+/* ============================================
+   1. Page Transitions
+   ============================================ */
+
+/* Fade Transition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.page-transition {
+  animation: fadeIn 300ms ease-out;
+}
+
+.page-transition-exit {
+  animation: fadeOut 300ms ease-in;
+}
+
+/* Slide Up Transition */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 400ms ease-out;
+}
+
+/* Slide In Right */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 300ms ease-out;
+}
+
+/* Scale In */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.scale-in {
+  animation: scaleIn 200ms ease-out;
+}
+
+/* ============================================
+   2. Micro-interactions
+   ============================================ */
+
+/* Card Hover Effects */
+.card-hover {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              z-index 0s 300ms;
+  will-change: transform, box-shadow;
+}
+
+.card-hover:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  transition-delay: 0s;
+}
+
+/* Button Hover */
+.button-hover {
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.button-hover:hover {
+  transform: scale(1.02);
+}
+
+.button-hover:active {
+  transform: scale(0.98);
+}
+
+/* Link Underline Animation */
+.link-underline {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* Icon Interactions */
+.icon-bounce {
+  transition: transform 200ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.icon-bounce:hover {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.icon-rotate {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-rotate:hover {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   3. Scroll Animations
+   ============================================ */
+
+/* Fade In Up (for scroll reveal) */
+@keyframes fadeInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 600ms ease-out forwards;
+}
+
+.fade-in-up-delay-1 {
+  animation-delay: 100ms;
+}
+
+.fade-in-up-delay-2 {
+  animation-delay: 200ms;
+}
+
+.fade-in-up-delay-3 {
+  animation-delay: 300ms;
+}
+
+/* Parallax Helper */
+.parallax {
+  will-change: transform;
+}
+
+/* ============================================
+   4. Loading States
+   ============================================ */
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #1a1a1a 0%,
+    #2a2a2a 50%,
+    #1a1a1a 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* Spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(229, 9, 20, 0.2);
+  border-top-color: #E50914;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-sm {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+.spinner-lg {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+/* Loading Dots */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.loading-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  background: #E50914;
+  border-radius: 50%;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ============================================
+   5. Focus States (Accessibility)
+   ============================================ */
+
+.focus-visible {
+  outline: 2px solid #E50914;
+  outline-offset: 2px;
+  transition: outline-offset 150ms ease;
+}
+
+.focus-visible:focus {
+  outline: 2px solid #E50914;
+  outline-offset: 2px;
+}
+
+.focus-visible:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* High Contrast Focus */
+.focus-high-contrast {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px #E50914;
+}
+
+/* ============================================
+   6. Ripple Effect (Material Design)
+   ============================================ */
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* ============================================
+   7. Glassmorphism (Modern Browsers)
+   ============================================ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================
+   8. Shadows & Depth (Elevation System)
+   ============================================ */
+
+.elevation-1 {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
+              0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.elevation-2 {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15),
+              0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.elevation-3 {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15),
+              0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.elevation-4 {
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2),
+              0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   9. Image Loading (LQIP - Blur Up)
+   ============================================ */
+
+.image-loading {
+  filter: blur(20px);
+  transition: filter 300ms ease-out;
+}
+
+.image-loaded {
+  filter: blur(0);
+}
+
+/* ============================================
+   10. Progress Bar Animation
+   ============================================ */
+
+@keyframes progress {
+  from {
+    width: 0;
+  }
+}
+
+.progress-bar {
+  animation: progress 500ms ease-out;
+  will-change: width;
+}
+
+/* ============================================
+   11. Reduced Motion Support
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .card-hover:hover {
+    transform: none;
+  }
+  
+  .button-hover:hover,
+  .button-hover:active {
+    transform: none;
+  }
+}
+
+/* ============================================
+   12. Skeleton Loading Components
+   ============================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #1a1a1a 25%,
+    #2a2a2a 50%,
+    #1a1a1a 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-text {
+  height: 16px;
+  margin-bottom: 8px;
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 12px;
+}
+
+.skeleton-image {
+  aspect-ratio: 2/3;
+  border-radius: 8px;
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+}
+
+/* ============================================
+   13. Pulse Animation (for Live badges, etc.)
+   ============================================ */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ============================================
+   14. Ping Animation (for notifications)
+   ============================================ */
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ============================================
+   15. Bounce Animation (for success states)
+   ============================================ */
+
+@keyframes bounce-custom {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.bounce {
+  animation: bounce-custom 1s infinite;
+}
+
+/* ============================================
+   16. Gradient Text
+   ============================================ */
+
+.gradient-text {
+  background: linear-gradient(135deg, #E50914 0%, #ff4757 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   17. Text Glow Effect
+   ============================================ */
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.5),
+               0 0 20px rgba(229, 9, 20, 0.3),
+               0 0 30px rgba(229, 9, 20, 0.2);
+}
+
+/* ============================================
+   18. Slide Animations for Modals/Drawers
+   ============================================ */
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 300ms ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-in-down {
+  animation: slideInDown 300ms ease-out;
+}
+
+/* ============================================
+   19. Zoom Animations
+   ============================================ */
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.zoom-in {
+  animation: zoomIn 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ============================================
+   20. Shake Animation (for errors)
+   ============================================ */
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.shake {
+  animation: shake 500ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}

@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "./styles/animations.css";
+@import "./styles/accessibility.css";
 
 /* Custom theme configuration - Netflix-style dark theme */
 @theme {
