@@ -1,100 +1,82 @@
 @import "tailwindcss";
-@import "./styles/animations.css";
-@import "./styles/accessibility.css";
 
-/* Custom theme configuration - Netflix-style dark theme */
-@theme {
-  /* Primary Colors - Netflix Red */
-  --color-red-50: #fef2f2;
-  --color-red-100: #fee2e2;
-  --color-red-200: #fecaca;
-  --color-red-300: #fca5a5;
-  --color-red-400: #f87171;
-  --color-red-500: #ef4444;
-  --color-red-600: #dc2626;
-  --color-red-700: #b91c1c;
-  --color-red-800: #991b1b;
-  --color-red-900: #7f1d1d;
-  --color-red-950: #450a0a;
-  
-  /* Neutral Colors - Dark Background */
-  --color-neutral-50: #fafafa;
-  --color-neutral-100: #f5f5f5;
-  --color-neutral-200: #e5e5e5;
-  --color-neutral-300: #d4d4d4;
-  --color-neutral-400: #a3a3a3;
-  --color-neutral-500: #737373;
-  --color-neutral-600: #525252;
-  --color-neutral-700: #404040;
-  --color-neutral-800: #262626;
-  --color-neutral-900: #171717;
-  --color-neutral-950: #0a0a0a;
-  
-  /* Custom Brand Colors */
-  --color-brand-red: #E50914;
-  --color-brand-dark: #141414;
-  --color-brand-gray: #B3B3B3;
-  --color-brand-blue: #1F80E0;
-  
-  /* Font Families */
-  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-family-display: 'Poppins', system-ui, -apple-system, sans-serif;
-  
-  /* Spacing */
-  --spacing-18: 4.5rem;
-  --spacing-88: 22rem;
-  
-  /* Aspect Ratios */
-  --aspect-poster: 2/3;
-  --aspect-backdrop: 16/9;
-  --aspect-card: 16/9;
-  
-  /* Animation */
-  --animate-fade-in: fadeIn 0.3s ease-in-out;
-  --animate-slide-up: slideUp 0.4s ease-out;
-  --animate-scale: scale 0.2s ease-out;
-  --animate-shimmer: shimmer 2s linear infinite;
-  
-  @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-  
-  @keyframes slideUp {
-    0% { transform: translateY(20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-  }
-  
-  @keyframes scale {
-    0% { transform: scale(0.95); }
-    100% { transform: scale(1); }
-  }
-  
-  @keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
-  }
-}
+/* ============================================
+   STREAMFLIX - PIXEL-PERFECT STYLES
+   Netflix/Prime Video Quality Standard
+   ============================================ */
 
-/* Base Styles */
+/* ============================================
+   BASE STYLES
+   ============================================ */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
-  scroll-behavior: smooth;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: #141414;
   color: #ffffff;
+  line-height: 1.5;
   overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
+/* ============================================
+   TYPOGRAPHY - EXACT SPECIFICATIONS
+   ============================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 56px;
+  @media (min-width: 768px) {
+    font-size: 72px;
+  }
+}
+
+h2 {
+  font-size: 24px;
+  @media (min-width: 768px) {
+    font-size: 28px;
+  }
+}
+
+h3 {
+  font-size: 20px;
+}
+
+p {
+  font-size: 15px;
+  line-height: 1.625;
+}
+
+.text-secondary {
+  color: #e5e5e5;
+}
+
+.text-tertiary {
+  color: #b3b3b3;
+}
+
+.text-muted {
+  color: #737373;
+}
+
+/* ============================================
+   SCROLLBAR - CUSTOM STYLING
+   ============================================ */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -106,61 +88,330 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #404040;
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #525252;
+  border-radius: 4px;
+  
+  &:hover {
+    background: #525252;
+  }
 }
 
 /* Hide scrollbar for content rows */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+/* ============================================
+   CARD STYLES - NETFLIX PRECISION
+   ============================================ */
+.card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #181818;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              z-index 0s 300ms;
+  will-change: transform, box-shadow;
+  cursor: pointer;
 }
 
-/* Video.js Custom Styles */
-.video-js {
-  font-family: 'Inter', system-ui, sans-serif;
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  z-index: 10;
+  transition-delay: 0s;
 }
 
-.video-js .vjs-big-play-button {
-  background-color: rgba(229, 9, 20, 0.9);
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .card-overlay {
+  opacity: 1;
+}
+
+/* ============================================
+   BUTTON STYLES - EXACT SPECIFICATIONS
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
   border: none;
-  border-radius: 9999px;
-  width: 5rem;
-  height: 5rem;
-  margin-top: -2.5rem;
-  margin-left: -2.5rem;
-  transition: all 0.2s;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
-.video-js .vjs-big-play-button:hover {
-  background-color: rgba(229, 9, 20, 1);
-  transform: scale(1.1);
+.btn:active {
+  transform: scale(0.98);
 }
 
-.video-js .vjs-control-bar {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
-}
-
-.video-js .vjs-play-progress {
+.btn-primary {
   background-color: #E50914;
+  color: #ffffff;
+  
+  &:hover {
+    background-color: #F40612;
+    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+  }
 }
 
-.video-js .vjs-slider {
+.btn-secondary {
+  background-color: rgba(109, 109, 110, 0.7);
+  color: #ffffff;
+  
+  &:hover {
+    background-color: rgba(109, 109, 110, 0.4);
+  }
+}
+
+.btn-sm {
+  height: 32px;
+  padding: 0 16px;
+  font-size: 13px;
+}
+
+.btn-md {
+  height: 40px;
+  padding: 0 24px;
+  font-size: 15px;
+}
+
+.btn-lg {
+  height: 48px;
+  padding: 0 32px;
+  font-size: 17px;
+}
+
+.btn-xl {
+  height: 56px;
+  padding: 0 40px;
+  font-size: 20px;
+}
+
+/* ============================================
+   INPUT STYLES
+   ============================================ */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: #ffffff;
+  background-color: #1f1f1f;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &::placeholder {
+    color: #737373;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #E50914;
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+  }
+}
+
+/* ============================================
+   LOADING STATES - SKELETON
+   ============================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #1a1a1a 25%,
+    #2a2a2a 50%,
+    #1a1a1a 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton-text {
+  height: 16px;
+  margin-bottom: 8px;
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 12px;
+}
+
+.skeleton-image {
+  aspect-ratio: 2 / 3;
+  border-radius: 8px;
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.badge-new {
+  background-color: #E50914;
+  color: #ffffff;
+}
+
+.badge-4k {
+  background-color: #00dc82;
+  color: #ffffff;
+}
+
+.badge-fhd {
+  background-color: #0071eb;
+  color: #ffffff;
+}
+
+.badge-hd {
+  background-color: #737373;
+  color: #ffffff;
+}
+
+.badge-match {
+  background-color: transparent;
+  color: #46d369;
+  font-weight: 700;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: 4px;
   background-color: #404040;
+  border-radius: 2px;
+  overflow: hidden;
+  
+  &__fill {
+    height: 100%;
+    background-color: #E50914;
+    border-radius: 2px;
+    transition: width 100ms linear;
+  }
+  
+  &__buffer {
+    position: absolute;
+    inset: 0;
+    background-color: #525252;
+    border-radius: 2px;
+  }
 }
 
-.video-js .vjs-load-progress {
-  background-color: #525252;
+/* ============================================
+   MODAL OVERLAY
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+  animation: fadeIn 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Line clamp utility */
+.modal {
+  background-color: #181818;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: scaleIn 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   TOAST NOTIFICATION
+   ============================================ */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  animation: slideUp 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   LINE CLAMP (TEXT TRUNCATION)
+   ============================================ */
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -182,80 +433,68 @@ body {
   overflow: hidden;
 }
 
-/* Selection color */
-::selection {
-  background-color: rgba(229, 9, 20, 0.3);
-  color: white;
-}
-
-/* Focus outline */
+/* ============================================
+   ACCESSIBILITY - FOCUS STATES
+   ============================================ */
 :focus-visible {
   outline: 2px solid #E50914;
   outline-offset: 2px;
 }
 
-/* Shimmer loading effect */
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    #1a1a1a 0%,
-    #2a2a2a 50%,
-    #1a1a1a 100%
-  );
-  background-size: 1000px 100%;
-  animation: shimmer 2s linear infinite;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-/* Gradient text */
-.gradient-text {
-  background: linear-gradient(135deg, #E50914 0%, #ff4757 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+  
+  @media (min-width: 768px) {
+    padding: 0 48px;
+  }
 }
 
-/* Card hover effects */
-.card-hover {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
-.card-hover:hover {
-  transform: scale(1.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-}
-
-/* Smooth image loading */
-img {
-  transition: opacity 0.3s ease;
-}
-
-img.loading {
-  opacity: 0;
-}
-
-img.loaded {
-  opacity: 1;
-}
-
-/* Progress bar animation */
-@keyframes progress {
-  0% { width: 0%; }
-  100% { width: var(--progress-width, 100%); }
-}
-
-.progress-bar {
-  animation: progress 0.5s ease-out;
-}
-
-/* Skeleton loader */
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    #1a1a1a 25%,
-    #2a2a2a 50%,
-    #1a1a1a 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 4px;
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #E50914;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 9999;
+  transition: top 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:focus {
+    top: 0;
+  }
 }
