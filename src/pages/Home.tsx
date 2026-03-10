@@ -15,15 +15,6 @@ export default function Home() {
   const horrorContent = allContent.filter(m => m.genre.includes('Horror'));
   const continueWatchingItems = getContinueWatchingItems();
 
-  // Mock progress data for continue watching
-  const progressData: Record<string, number> = {
-    '1': 45,
-    '2': 72,
-    '3': 30,
-    '101': 65,
-    '102': 20,
-  };
-
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -34,14 +25,11 @@ export default function Home() {
 
       {/* Content Sections */}
       <div className="space-y-8 py-8">
-        {/* Continue Watching */}
         {continueWatchingItems.length > 0 && (
           <ContentRow
             title="Continue Watching"
             movies={continueWatchingItems}
             variant="landscape"
-            showProgress
-            progressData={progressData}
             seeAllLink="/my-list"
           />
         )}
@@ -52,7 +40,6 @@ export default function Home() {
           movies={topRated}
           variant="poster"
           showRank
-          description="The most watched content today"
         />
 
         {/* Trending Now */}
@@ -118,8 +105,7 @@ export default function Home() {
         <ContentRow
           title="Because You Watched Interstellar"
           movies={[...sciFiContent].sort(() => 0.5 - Math.random()).slice(0, 6)}
-          variant="standard"
-          description="Based on your viewing history"
+          variant="poster"
         />
       </div>
     </div>

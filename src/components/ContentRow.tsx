@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MovieCard from './MovieCard';
 import type { Movie, TVShow } from '../types';
@@ -6,23 +6,17 @@ import type { Movie, TVShow } from '../types';
 interface ContentRowProps {
   title: string;
   movies: (Movie | TVShow)[];
-  variant?: 'poster' | 'standard' | 'landscape' | 'small';
+  variant?: 'poster' | 'landscape';
   showRank?: boolean;
-  showProgress?: boolean;
-  progressData?: Record<string, number>;
   seeAllLink?: string;
-  description?: string;
 }
 
-export default function ContentRow({ 
-  title, 
-  movies, 
+export default function ContentRow({
+  title,
+  movies,
   variant = 'poster',
   showRank = false,
-  showProgress = false,
-  progressData = {},
   seeAllLink,
-  description,
 }: ContentRowProps) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -44,77 +38,64 @@ export default function ContentRow({
     }
   };
 
-  // Auto-scroll pause on hover
-  useEffect(() => {
-    if (isHovered && rowRef.current) {
-      rowRef.current.style.scrollBehavior = 'auto';
-    } else if (rowRef.current) {
-      rowRef.current.style.scrollBehavior = 'smooth';
-    }
-  }, [isHovered]);
-
   if (movies.length === 0) return null;
 
   return (
-    <section 
-      className="relative py-4 group/row"
+    // Row Structure - margin-bottom: 48px
+    <section
+      className="relative mb-12 group/row"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 mb-4">
-        <div>
-          <h2 className="text-xl md:text-2xl font-bold text-white">{title}</h2>
-          {description && (
-            <p className="text-sm text-gray-400 mt-1">{description}</p>
-          )}
-        </div>
+      <div className="flex items-center justify-between mb-4 px-4 md:px-12">
+        <h2 className="text-xl md:text-2xl font-semibold text-white">
+          {title}
+        </h2>
         {seeAllLink && (
           <Link
             to={seeAllLink}
-            className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1 group"
+            className="text-sm text-[#e5e5e5] hover:text-white transition-colors duration-200 flex items-center gap-1 group"
           >
             See All
-            <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
         )}
       </div>
 
-      {/* Carousel Container */}
       <div className="relative">
-        {/* Left Arrow */}
         {showLeftArrow && (
           <button
             onClick={() => scroll('left')}
-            className={`absolute left-0 top-0 bottom-0 z-30 w-12 bg-gradient-to-r from-neutral-950 to-transparent flex items-center justify-center transition-opacity duration-300 ${
+            className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 md:w-20 h-full flex items-center justify-center bg-[#141414]/70 hover:bg-[#141414]/90 hover:scale-105 transition-all duration-300 ${
               isHovered ? 'opacity-100' : 'opacity-0'
-            } hover:from-neutral-950/90`}
+            }`}
             aria-label="Scroll left"
           >
-            <div className="p-2 bg-neutral-800/80 backdrop-blur-sm rounded-full text-white hover:bg-neutral-700 transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </div>
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
           </button>
         )}
 
-        {/* Movies Container */}
         <div
           ref={rowRef}
           onScroll={handleScroll}
-          className="flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-4 pb-4"
-          style={{ 
-            scrollbarWidth: 'none', 
-            msOverflowStyle: 'none',
+          className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide px-4 md:px-12 pb-4"
+          style={{
             scrollSnapType: 'x mandatory',
+            scrollBehavior: 'smooth',
           }}
         >
           {movies.map((movie, index) => (
-            <div 
-              key={movie._id} 
+            <div
+              key={movie._id}
               className="flex-shrink-0"
               style={{ scrollSnapAlign: 'start' }}
             >
@@ -122,27 +103,22 @@ export default function ContentRow({
                 movie={movie}
                 variant={variant}
                 showRank={showRank ? index + 1 : undefined}
-                showProgress={showProgress ? (progressData[movie._id] || 0) : undefined}
-                isNew={movie.isNewRelease}
               />
             </div>
           ))}
         </div>
 
-        {/* Right Arrow */}
         {showRightArrow && (
           <button
             onClick={() => scroll('right')}
-            className={`absolute right-0 top-0 bottom-0 z-30 w-12 bg-gradient-to-l from-neutral-950 to-transparent flex items-center justify-center transition-opacity duration-300 ${
+            className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 md:w-20 h-full flex items-center justify-center bg-[#141414]/70 hover:bg-[#141414]/90 hover:scale-105 transition-all duration-300 ${
               isHovered ? 'opacity-100' : 'opacity-0'
-            } hover:from-neutral-950/90`}
+            }`}
             aria-label="Scroll right"
           >
-            <div className="p-2 bg-neutral-800/80 backdrop-blur-sm rounded-full text-white hover:bg-neutral-700 transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </button>
         )}
       </div>

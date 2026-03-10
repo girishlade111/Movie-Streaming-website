@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAppStore } from '../store';
 import { useDebounce } from '../hooks';
 
@@ -13,7 +13,6 @@ export default function Navbar() {
   
   const debouncedSearch = useDebounce(searchQuery, 300);
   const { setSearchQuery: setGlobalSearchQuery } = useAppStore();
-  const navigate = useNavigate();
   const profileRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
 
@@ -44,14 +43,6 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      setIsSearchOpen(false);
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-    }
-  };
-
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'TV Shows', path: '/browse/tv-shows' },
@@ -68,100 +59,90 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-[300] transition-all duration-300 ${
-          isScrolled ? 'bg-[#141414]/95 backdrop-blur-md shadow-lg' : 'bg-gradient-to-b from-[#141414]/90 to-transparent'
+      {/* Header - Fixed position, z-index 50 */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled ? 'bg-[#141414]/90 backdrop-blur-md' : 'bg-gradient-to-b from-[#141414] to-transparent'
         }`}
+        style={{ height: '68px' }}
       >
-        <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between h-[56px] md:h-[64px] lg:h-[72px]">
+        <div className="container mx-auto px-4 md:px-12 h-full">
+          <div className="flex items-center justify-between h-full">
             {/* Left Section */}
-            <div className="flex items-center gap-4 md:gap-6">
-              {/* Mobile Menu Button */}
+            <div className="flex items-center gap-6">
+              {/* Mobile Hamburger */}
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden p-2 text-[#e5e5e5] hover:text-white transition-colors duration-150"
-                aria-label="Toggle menu"
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="md:hidden p-2 text-[#e5e5e5] hover:text-white transition-colors duration-200"
+                aria-label="Menu"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
 
-              {/* Logo */}
-              <Link to="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-[#E50914] to-[#B20710] rounded-md flex items-center justify-center">
-                  <svg className="w-5 h-5 md:w-6 md:h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z" />
-                  </svg>
-                </div>
-                <span className="text-xl md:text-2xl font-bold text-[#E50914] hidden sm:block tracking-tight">
+              {/* Logo - height 32px */}
+              <Link to="/" className="flex items-center">
+                <div className="h-8 w-auto text-[#E50914] font-bold text-2xl tracking-tight">
                   StreamFlix
-                </span>
+                </div>
               </Link>
 
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-6 ml-4 lg:ml-8">
+              {/* Desktop Navigation - gap 20px, font-size 14px */}
+              <nav className="hidden md:flex items-center gap-5 ml-8">
                 {navLinks.map((link) => (
                   <Link
                     key={link.name}
                     to={link.path}
-                    className="text-[#e5e5e5] hover:text-white transition-colors duration-150 text-sm font-medium"
+                    className="text-[#e5e5e5] hover:text-white transition-colors duration-200 text-sm font-medium"
                   >
                     {link.name}
                   </Link>
                 ))}
-              </div>
+              </nav>
             </div>
 
             {/* Right Section */}
-            <div className="flex items-center gap-2 md:gap-4">
-              {/* Search */}
-              <form onSubmit={handleSearch} className="relative">
-                <div
-                  className={`flex items-center transition-all duration-300 ${
-                    isSearchOpen ? 'w-64 md:w-80' : 'w-10'
-                  }`}
+            <div className="flex items-center gap-4">
+              {/* Search - 24px icon, hover scale 1.1 */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className="p-2 text-[#e5e5e5] hover:text-white hover:scale-110 transition-all duration-200"
+                  aria-label="Search"
                 >
-                  <button
-                    type="button"
-                    onClick={() => setIsSearchOpen(!isSearchOpen)}
-                    className="p-2 text-[#e5e5e5] hover:text-white transition-colors duration-150"
-                    aria-label="Search"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </button>
-                  {isSearchOpen && (
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Titles, people, genres"
-                      className="flex-1 ml-2 px-3 py-2 bg-[#1f1f1f] border border-[#404040] rounded text-sm text-white placeholder-[#737373] focus:outline-none focus:border-[#E50914] transition-colors"
-                      autoFocus
-                    />
-                  )}
-                </div>
-              </form>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+                {isSearchOpen && (
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Titles, people, genres"
+                    className="absolute right-0 top-full mt-2 w-72 px-4 py-2 bg-[#1f1f1f] border border-[#404040] rounded text-sm text-white placeholder-[#737373] focus:outline-none focus:border-[#E50914]"
+                    autoFocus
+                  />
+                )}
+              </div>
 
-              {/* Notifications */}
+              {/* Notification Bell - 24px with red dot (8px) */}
               <div className="relative" ref={notificationRef}>
                 <button
                   onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                  className="p-2 text-[#e5e5e5] hover:text-white transition-colors duration-150 relative"
+                  className="p-2 text-[#e5e5e5] hover:text-white hover:scale-110 transition-all duration-200 relative"
                   aria-label="Notifications"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                   </svg>
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-[#E50914] rounded-full"></span>
+                  <span className="absolute top-2 right-2 w-2 h-2 bg-[#E50914] rounded-full"></span>
                 </button>
 
                 {/* Notifications Dropdown */}
                 {isNotificationsOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-[#1f1f1f] border border-[#333333] rounded-lg shadow-2xl overflow-hidden">
+                  <div className="absolute right-0 mt-2 w-80 bg-[#1f1f1f] border border-[#333333] rounded-md shadow-2xl overflow-hidden z-50">
                     <div className="p-4 border-b border-[#333333]">
                       <h3 className="font-semibold text-white">Notifications</h3>
                     </div>
@@ -184,32 +165,22 @@ export default function Navbar() {
                         </div>
                       ))}
                     </div>
-                    <div className="p-3 text-center border-t border-[#333333]">
-                      <button className="text-sm text-[#E50914] hover:text-[#F40612] font-medium">
-                        View All Notifications
-                      </button>
-                    </div>
                   </div>
                 )}
               </div>
 
-              {/* Profile Dropdown */}
+              {/* User Avatar - 32px circle */}
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center gap-2 p-1 rounded hover:bg-[#1f1f1f] transition-colors duration-150"
+                  className="w-8 h-8 rounded-full bg-gradient-to-br from-[#E50914] to-[#ff4757] flex items-center justify-center text-white text-sm font-semibold border-2 border-transparent hover:border-[#e5e5e5] transition-colors duration-200"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-br from-[#E50914] to-[#ff4757] rounded flex items-center justify-center text-white text-sm font-semibold">
-                    U
-                  </div>
-                  <svg className="w-4 h-4 text-[#e5e5e5] hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
+                  U
                 </button>
 
-                {/* Profile Dropdown Menu */}
+                {/* Profile Dropdown */}
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-[#1f1f1f] border border-[#333333] rounded-lg shadow-2xl overflow-hidden">
+                  <div className="absolute right-0 mt-2 w-56 bg-[#1f1f1f] border border-[#333333] rounded-md shadow-2xl overflow-hidden z-50">
                     <div className="p-4 border-b border-[#333333]">
                       <p className="text-sm font-medium text-white">User</p>
                       <p className="text-xs text-[#b3b3b3]">user@example.com</p>
@@ -250,89 +221,50 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      </nav>
+      </header>
 
-      {/* Mobile Sidebar */}
-      <div
-        className={`fixed inset-0 z-[400] md:hidden transition-opacity duration-300 ${
-          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-      >
-        {/* Backdrop */}
-        <div
-          className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-        
-        {/* Sidebar */}
-        <div
-          className={`absolute left-0 top-0 bottom-0 w-72 bg-[#181818] transform transition-transform duration-300 ${
-            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
-        >
-          <div className="p-6 border-b border-[#333333]">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#E50914] to-[#B20710] rounded-md flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z" />
-                </svg>
-              </div>
-              <span className="text-2xl font-bold text-[#E50914]">StreamFlix</span>
-            </div>
-          </div>
-
-          <nav className="p-4 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-4 px-4 py-3 text-[#e5e5e5] hover:bg-[#2a2a2a] hover:text-white rounded-lg transition-colors"
-              >
-                {link.name === 'Home' && (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      {/* Mobile Menu Overlay - Full screen, slide from left */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] md:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          {/* Menu Panel - slide from left */}
+          <div className="absolute left-0 top-0 bottom-0 w-72 bg-[#181818] transform transition-transform duration-300">
+            <div className="p-6 border-b border-[#333333]">
+              <div className="flex items-center justify-between">
+                <div className="h-8 text-[#E50914] font-bold text-2xl tracking-tight">
+                  StreamFlix
+                </div>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 text-[#e5e5e5] hover:text-white transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                )}
-                {link.name === 'TV Shows' && (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                )}
-                {link.name === 'Movies' && (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                  </svg>
-                )}
-                {link.name === 'Sports' && (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                )}
-                {link.name === 'Premium' && (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                  </svg>
-                )}
-                <span className="font-medium">{link.name}</span>
-              </Link>
-            ))}
-          </nav>
-
-          <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-[#333333]">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#E50914] to-[#ff4757] rounded flex items-center justify-center text-white font-semibold">
-                U
-              </div>
-              <div>
-                <p className="text-sm font-medium text-white">User</p>
-                <p className="text-xs text-[#b3b3b3]">Free Plan</p>
+                </button>
               </div>
             </div>
+
+            <nav className="p-4 space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-4 px-4 py-3 text-[#e5e5e5] hover:bg-[#2a2a2a] hover:text-white rounded-md transition-colors"
+                >
+                  <span className="font-medium">{link.name}</span>
+                </Link>
+              ))}
+            </nav>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
