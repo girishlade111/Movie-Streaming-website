@@ -6,3 +6,5 @@ export { default as RegisterPage } from './RegisterPage';
 export { default as SearchPage } from './SearchPage';
 export { default as BrowsePage } from './BrowsePage';
 export { default as MyListPage } from './MyListPage';
+export { default as ContinueWatchingPage } from './ContinueWatchingPage';
+export { default as SettingsPage } from './SettingsPage';

@@ -1,14 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { MainLayout, PlayerLayout } from './layouts';
-import { 
-  Home, 
-  WatchPage, 
-  MovieDetail, 
-  LoginPage, 
-  RegisterPage, 
+import {
+  Home,
+  WatchPage,
+  MovieDetail,
+  LoginPage,
+  RegisterPage,
   SearchPage,
   BrowsePage,
   MyListPage,
+  ContinueWatchingPage,
+  SettingsPage,
 } from './pages';
 
 function App() {
@@ -25,11 +27,12 @@ function App() {
           <Route path="tv-shows" element={<BrowsePage />} />
           <Route path="sports" element={<BrowsePage />} />
           <Route path="my-list" element={<MyListPage />} />
+          <Route path="continue-watching" element={<ContinueWatchingPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="movie/:id" element={<MovieDetail />} />
           <Route path="show/:id" element={<MovieDetail />} />
           <Route path="premium" element={<Home />} />
-          <Route path="settings" element={<Home />} />
+          <Route path="settings" element={<SettingsPage />} />
           <Route path="help" element={<Home />} />
           <Route path="about" element={<Home />} />
           <Route path="terms" element={<Home />} />
