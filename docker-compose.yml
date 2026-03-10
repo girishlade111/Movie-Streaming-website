@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Main application
+  streamflix:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - streamflix-network
+    labels:
+      - "app=streamflix"
+      - "environment=production"
+
+  # Development server
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    networks:
+      - streamflix-network
+
+networks:
+  streamflix-network:
+    driver: bridge

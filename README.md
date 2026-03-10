@@ -1,55 +1,66 @@
 # StreamFlix - Movie Streaming Platform
 
-A modern, full-featured movie streaming web application built with React, TypeScript, and Tailwind CSS. Inspired by platforms like Netflix, JioHotstar, and Amazon Prime Video.
+[![CI/CD](https://github.com/girishlade111/Movie-Streaming-website/actions/workflows/ci.yml/badge.svg)](https://github.com/girishlade111/Movie-Streaming-website/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19.2-blue)](https://react.dev/)
 
-![StreamFlix Banner](https://img.shields.io/badge/StreamFlix-Movie%20Streaming-blueviolet)
+A modern, full-featured movie streaming platform built with React, TypeScript, and Tailwind CSS.
 
 ## 🎬 Features
 
-### Phase 1 - Core Features (Completed)
-- ✅ Modern React 18+ with TypeScript
-- ✅ Responsive design with Tailwind CSS
-- ✅ Custom theme configuration
-- ✅ State management with Zustand
-- ✅ React Router v6 for navigation
-- ✅ Video.js integration for video playback
-- ✅ Hero banner with featured content
-- ✅ Movie cards with hover effects
-- ✅ Content rows with horizontal scrolling
-- ✅ Search functionality with debouncing
-- ✅ Movie detail pages
-- ✅ Video player with custom controls
-- ✅ Authentication UI (Login/Register)
-- ✅ Keyboard shortcuts for video player
+### User Features
+- **Browse & Search**: Discover movies, TV shows, and live sports
+- **Video Player**: Premium player with quality selection, subtitles, and keyboard shortcuts
+- **My List**: Save content for later viewing
+- **Continue Watching**: Pick up where you left off
+- **Live TV**: Watch live channels with EPG guide
+- **Sports**: Live events, scores, and highlights
+- **Responsive Design**: Works on all devices
 
-### Upcoming Features
-- 🔄 Backend API with Node.js & Express
-- 🔄 User authentication with JWT
-- 🔄 MongoDB database integration
-- 🔄 Movie/TV show CRUD operations
-- 🔄 User watchlist & watch history
-- 🔄 Subscription plans & payments
-- 🔄 Admin dashboard
-- 🔄 Video upload & transcoding
-- 🔄 Real-time analytics
+### Admin Features
+- **Dashboard**: Analytics and content overview
+- **Content Management**: Add/edit movies and TV shows
+- **Analytics**: Track views, engagement, and performance
+- **Settings**: Configure platform settings
 
-## 🛠️ Tech Stack
+### Technical Features
+- **PWA Support**: Install as native app
+- **Offline Mode**: Watch downloaded content offline
+- **Code Splitting**: Optimized bundle sizes
+- **Service Worker**: Intelligent caching
+- **TypeScript**: Full type safety
+- **Testing**: Unit, integration, and E2E tests
 
-### Frontend
-- **Framework:** React 19.2.0
-- **Language:** TypeScript 5.9.3
-- **Build Tool:** Vite 7.3.1
-- **Styling:** Tailwind CSS 3.x
-- **State Management:** Zustand
-- **Routing:** React Router v6
-- **Video Player:** Video.js
+## 🚀 Quick Start
 
-### Backend (Planned)
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Database:** MongoDB
-- **Authentication:** JWT
-- **File Storage:** Cloudinary / AWS S3
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/girishlade111/Movie-Streaming-website.git
+cd "Movie streaming website"
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+Visit `http://localhost:5173`
+
+### Admin Dashboard
+
+Visit `http://localhost:5173/admin/login`
+
+**Demo Credentials:**
+- Username: `admin`
+- Password: `admin123`
 
 ## 📁 Project Structure
 
@@ -57,187 +68,125 @@ A modern, full-featured movie streaming web application built with React, TypeSc
 Movie streaming website/
 ├── public/                 # Static assets
 ├── src/
-│   ├── assets/            # Images, videos, fonts
-│   │   ├── images/
-│   │   └── videos/
-│   ├── components/        # Reusable UI components
-│   │   ├── Navbar.tsx
-│   │   ├── Footer.tsx
-│   │   ├── MovieCard.tsx
-│   │   ├── HeroBanner.tsx
-│   │   ├── VideoPlayer.tsx
-│   │   ├── ContentRow.tsx
-│   │   └── index.ts
-│   ├── constants/         # App constants & config
-│   │   └── index.ts
-│   ├── hooks/             # Custom React hooks
-│   │   ├── useDebounce.ts
-│   │   ├── useKeyboardShortcuts.ts
-│   │   ├── useLocalStorage.ts
-│   │   └── index.ts
-│   ├── layouts/           # Page layouts
-│   │   ├── MainLayout.tsx
-│   │   ├── PlayerLayout.tsx
-│   │   └── index.ts
-│   ├── pages/             # Page components
-│   │   ├── Home.tsx
-│   │   ├── WatchPage.tsx
-│   │   ├── MovieDetail.tsx
-│   │   ├── LoginPage.tsx
-│   │   ├── RegisterPage.tsx
-│   │   ├── SearchPage.tsx
-│   │   └── index.ts
-│   ├── services/          # API services
-│   ├── store/             # Zustand stores
-│   │   ├── authStore.ts
-│   │   ├── movieStore.ts
-│   │   ├── playerStore.ts
-│   │   └── index.ts
-│   ├── types/             # TypeScript types
-│   │   └── index.ts
-│   ├── utils/             # Utility functions
-│   ├── App.tsx            # Main App component
-│   ├── main.tsx           # Entry point
-│   └── index.css          # Global styles
-├── .env                   # Environment variables
-├── .env.example           # Environment variables template
-├── index.html             # HTML entry point
-├── package.json           # Dependencies & scripts
-├── tailwind.config.js     # Tailwind configuration
-├── postcss.config.js      # PostCSS configuration
-├── tsconfig.json          # TypeScript configuration
-├── vite.config.ts         # Vite configuration
-└── README.md              # Documentation
+│   ├── components/        # Reusable components
+│   ├── pages/            # Page components
+│   ├── layouts/          # Layout components
+│   ├── hooks/            # Custom hooks
+│   ├── store/            # State management
+│   ├── types/            # TypeScript types
+│   ├── utils/            # Utility functions
+│   ├── constants/        # Constants and mock data
+│   ├── styles/           # CSS styles
+│   ├── tests/            # Unit tests
+│   └── main.tsx          # Entry point
+├── cypress/              # E2E tests
+├── .github/workflows/    # CI/CD configuration
+└── package.json
 ```
 
-## 🚀 Getting Started
+## 🧪 Testing
 
-### Prerequisites
+```bash
+# Run unit tests
+npm run test
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Git
+# Run tests in watch mode
+npm run test:watch
 
-### Installation
+# Run tests with coverage
+npm run test:coverage
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/girishlade111/Movie-Streaming-website.git
-   cd "Movie streaming website"
-   ```
+# Run E2E tests
+npm run test:e2e
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   # Copy the example env file
-   cp .env.example .env
-   
-   # Edit .env with your configuration
-   ```
-
-4. **Start development server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Open your browser**
-   ```
-   http://localhost:5173
-   ```
-
-## 📜 Available Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
-
-## 🎨 Customization
-
-### Theme Colors
-
-Edit `tailwind.config.js` to customize colors:
-
-```javascript
-theme: {
-  extend: {
-    colors: {
-      primary: { /* ... */ },
-      dark: { /* ... */ },
-      accent: {
-        red: '#e50914',
-        purple: '#7c3aed',
-      }
-    },
-  },
-}
+# Open Cypress UI
+npm run test:e2e:open
 ```
 
-### Adding New Pages
+## 🐳 Docker
 
-1. Create a new component in `src/pages/`
-2. Add the route in `src/App.tsx`
-3. Import and use in your layout
+```bash
+# Build and run production container
+docker-compose up streamflix
 
-## 🔌 API Integration
+# Run development server
+docker-compose up dev
+```
+
+## 📦 Build
+
+```bash
+# Production build
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## 🌍 Deployment
 
 ### Environment Variables
 
+Copy `.env.example` to `.env.local` and configure:
+
 ```env
-VITE_API_URL=http://localhost:5000/api
-VITE_IMAGE_URL=https://image.tmdb.org/t/p
+VITE_API_BASE_URL=http://localhost:5000/api
+VITE_CDN_URL=https://cdn.example.com
+VITE_ENABLE_PWA=true
 ```
 
-### Making API Calls
+### Platforms
 
-```typescript
-import { API_BASE_URL } from './constants';
+- **Vercel**: `vercel deploy`
+- **Netlify**: Connect GitHub repository
+- **Docker**: `docker-compose up -d`
+- **AWS**: Use provided deployment scripts
 
-async function fetchMovies() {
-  const response = await fetch(`${API_BASE_URL}/movies`);
-  return response.json();
-}
-```
+## 🎨 Tech Stack
 
-## 📱 Responsive Breakpoints
+- **Frontend**: React 19, TypeScript, Vite
+- **Styling**: Tailwind CSS 4
+- **State**: Zustand
+- **Routing**: React Router v7
+- **Video**: Video.js
+- **Testing**: Jest, React Testing Library, Cypress
+- **Build**: Vite, TypeScript
 
-| Breakpoint | Min Width | Device |
-|------------|-----------|--------|
-| sm | 640px | Mobile landscape |
-| md | 768px | Tablets |
-| lg | 1024px | Laptops |
-| xl | 1280px | Desktops |
-| 2xl | 1536px | Large screens |
+## 📱 PWA Features
 
-## ⌨️ Keyboard Shortcuts
+- Installable on mobile/desktop
+- Offline support
+- Push notifications ready
+- App manifest
+- Service Worker caching
 
-| Key | Action |
-|-----|--------|
-| `Space` / `K` | Play/Pause |
-| `M` | Mute/Unmute |
-| `↑` | Volume Up |
-| `↓` | Volume Down |
-| `F` | Fullscreen |
+## ♿ Accessibility
+
+- WCAG 2.1 AA compliant
+- Keyboard navigation
+- Screen reader support
+- Focus management
+- Reduced motion support
+
+## 📊 Performance
+
+- Lighthouse score: 90+
+- Code splitting
+- Lazy loading
+- Image optimization
+- Service Worker caching
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
-
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ## 👨‍💻 Author
 
@@ -247,13 +196,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- Movie data provided by [TMDB](https://www.themoviedb.org/)
-- Video player powered by [Video.js](https://videojs.com/)
-- UI inspired by Netflix, JioHotstar, and Amazon Prime Video
-
-## 📞 Support
-
-For support, email girishlade111@gmail.com or open an issue in the repository.
+- Movie data from [TMDB](https://www.themoviedb.org/)
+- Video player by [Video.js](https://videojs.com/)
+- Icons from [Heroicons](https://heroicons.com/)
 
 ---
 
