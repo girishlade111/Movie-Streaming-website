@@ -11,6 +11,8 @@ import {
   MyListPage,
   ContinueWatchingPage,
   SettingsPage,
+  SportsPage,
+  TVGuidePage,
 } from './pages';
 
 function App() {
@@ -25,7 +27,8 @@ function App() {
           <Route path="browse/:category/:genre" element={<BrowsePage />} />
           <Route path="movies" element={<BrowsePage />} />
           <Route path="tv-shows" element={<BrowsePage />} />
-          <Route path="sports" element={<BrowsePage />} />
+          <Route path="sports" element={<SportsPage />} />
+          <Route path="tv-guide" element={<TVGuidePage />} />
           <Route path="my-list" element={<MyListPage />} />
           <Route path="continue-watching" element={<ContinueWatchingPage />} />
           <Route path="search" element={<SearchPage />} />

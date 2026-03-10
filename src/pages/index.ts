@@ -8,3 +8,5 @@ export { default as BrowsePage } from './BrowsePage';
 export { default as MyListPage } from './MyListPage';
 export { default as ContinueWatchingPage } from './ContinueWatchingPage';
 export { default as SettingsPage } from './SettingsPage';
+export { default as SportsPage } from './SportsPage';
+export { default as TVGuidePage } from './TVGuidePage';

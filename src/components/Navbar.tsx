@@ -58,7 +58,7 @@ export default function Navbar() {
     { name: 'Home', path: '/' },
     { name: 'TV Shows', path: '/browse/tv-shows' },
     { name: 'Movies', path: '/browse/movies' },
-    { name: 'Sports', path: '/browse/sports' },
+    { name: 'Sports', path: '/sports' },
     { name: 'Premium', path: '/premium' },
   ];
 
