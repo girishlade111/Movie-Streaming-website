@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import { MainLayout, PlayerLayout } from './layouts';
 import { SkeletonHero } from './components/Skeleton';
+import { AdminLayout } from './layouts';
 
 // Lazy loaded pages for code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -17,6 +18,13 @@ const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const SportsPage = lazy(() => import('./pages/SportsPage'));
 const TVGuidePage = lazy(() => import('./pages/TVGuidePage'));
 
+// Admin pages
+const AdminLogin = lazy(() => import('./pages/admin/Login'));
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
+const AdminMovies = lazy(() => import('./pages/admin/Movies'));
+const AdminAnalytics = lazy(() => import('./pages/admin/Analytics'));
+const AdminSettings = lazy(() => import('./pages/admin/Settings'));
+
 // Loading fallback component
 function PageLoadingFallback() {
   return (
@@ -31,6 +39,13 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<PageLoadingFallback />}>
         <Routes>
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
+          <Route path="/admin/movies" element={<AdminLayout><AdminMovies /></AdminLayout>} />
+          <Route path="/admin/analytics" element={<AdminLayout><AdminAnalytics /></AdminLayout>} />
+          <Route path="/admin/settings" element={<AdminLayout><AdminSettings /></AdminLayout>} />
+
           {/* Main Layout Routes */}
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
