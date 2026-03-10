@@ -240,26 +240,34 @@ p {
 }
 
 /* ============================================
-   LOADING STATES - SKELETON
+   LOADING STATES - SKELETON (Netflix-style)
    ============================================ */
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    #1a1a1a 25%,
-    #2a2a2a 50%,
-    #1a1a1a 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  background: #232323;
+  overflow: hidden;
+  position: relative;
   border-radius: 4px;
+}
+
+/* Shimmer effect */
+.skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  animation: shimmer 1.5s infinite;
+  transform: translateX(-100%);
 }
 
 @keyframes shimmer {
   0% {
-    background-position: -1000px 0;
+    transform: translateX(-100%);
   }
   100% {
-    background-position: 1000px 0;
+    transform: translateX(100%);
   }
 }
 
@@ -277,6 +285,83 @@ p {
 .skeleton-image {
   aspect-ratio: 2 / 3;
   border-radius: 8px;
+}
+
+/* ============================================
+   MODAL ANIMATION (Netflix-style)
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+  /* Enter: opacity 0 -> 1 (300ms) */
+  animation: modalOverlayEnter 300ms ease-out forwards;
+}
+
+.modal {
+  position: relative;
+  background-color: #181818;
+  border-radius: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  /* Enter: scale 0.95, translateY 20px -> scale 1, translateY 0 (400ms, cubic-bezier(0.16, 1, 0.3, 1)) */
+  animation: modalContentEnter 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalOverlayEnter {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes modalContentEnter {
+  0% {
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Exit animations (faster - 200ms) */
+.modal-overlay-exit {
+  animation: modalOverlayExit 200ms ease-in forwards;
+}
+
+.modal-exit {
+  animation: modalContentExit 200ms ease-in forwards;
+}
+
+@keyframes modalOverlayExit {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes modalContentExit {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+  }
 }
 
 /* ============================================
