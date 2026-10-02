@@ -206,4 +206,8 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Made with ❤️ using React, TypeScript, and Tailwind CSS**
 
+---
+
+**Built by Girish Lade** — https://ladestack.in
+
 </div>
